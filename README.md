@@ -14,7 +14,7 @@ import SafeCollectionAccess
 
 let first5Fibonacci = [1, 1, 2, 3, 5]
 
-print(first5Fibonacci[0]) // Optional(1)
-print(first5Fibonacci[0] == first5Fibonacci[1]) // true
-print(first5Fibonacci[5]) // nil
+print(first5Fibonacci[orNil: 0]) // Optional(1)
+print(first5Fibonacci[orNil: 0] == first5Fibonacci[safe: 1]) // true
+print(first5Fibonacci[safe: 5]) // nil
 ```
