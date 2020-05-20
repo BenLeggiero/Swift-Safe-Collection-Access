@@ -10,10 +10,8 @@ import Foundation
 
 
 
-public extension RandomAccessCollection
-    where Index: Strideable,
-        Index.Stride: SignedInteger 
-{
+public extension RandomAccessCollection {
+    
     /// Safely access ranges in this collection.
     /// If the range you pass extends outside this collection, `nil` is returned.
     ///
@@ -24,7 +22,7 @@ public extension RandomAccessCollection
     ///            within `0` (inclusive) and `count` (exclusive).
     @inlinable
     subscript(orNil range: ClosedRange<Index>) -> SubSequence? {
-        return contains(allIn: range)
+        return contains(index: range.lowerBound) && contains(index: range.upperBound)
             ? self[range]
             : nil
     }
@@ -40,7 +38,11 @@ public extension RandomAccessCollection
     ///            within `0` (inclusive) and `count` (inclusive).
     @inlinable
     subscript(orNil range: Range<Index>) -> SubSequence? {
-        return contains(allIn: range)
+        guard !range.isEmpty else {
+            return self[range]
+        }
+        
+        return contains(index: range.lowerBound) && contains(index: index(before: range.upperBound))
             ? self[range]
             : nil
     }
