@@ -49,22 +49,6 @@ public extension RandomAccessCollection {
             ? self[index]
             : nil
     }
-    
-    
-    /// - Deprecated: Use a subscript with a more descriptive label, like `[orNil:]` or `[clamping:]`
-    ///
-    /// Safely access this collection. If the index you pass is not in this collection, then `nil` is returned.
-    ///
-    /// This is an inlined alias to `[orNil:]`.
-    ///
-    ///
-    /// - Parameter index: The index of the element to retrieve, or an index outside this collection
-    /// - Returns: The element which is in this collection at the given index, or `nil` if it's outside this collection
-    @inline(__always)
-    @available(swift, deprecated: 0.0.1, message: "Deprecated in SafeCollectionAccess 1.2.0: Since there is no clear behavior of a 'safe' subscript, use the one which best describes your target behavior, like `[orNil:]` or `[clamping:]`")
-    subscript(safe index: Index) -> Element? {
-        self[orNil: index]
-    }
 }
 
 
