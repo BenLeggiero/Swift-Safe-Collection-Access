@@ -31,8 +31,12 @@ final class RangeOrNilTests: XCTestCase {
         XCTAssertEqual(first5Fibonacci[orNil: 0..<1], [1])
         XCTAssertEqual(first5Fibonacci[orNil: 0..<0], [])
         
+        XCTAssertEqual(first5Fibonacci[orNil: 2..<2], [])
+        
         XCTAssertNil(first5Fibonacci[orNil:  -1 ..<  0])
+        XCTAssertNil(first5Fibonacci[orNil:  -1 ..<  2])
         XCTAssertNil(first5Fibonacci[orNil:   0 ..<  6])
+        XCTAssertNil(first5Fibonacci[orNil:   2 ..<  6])
         XCTAssertNil(first5Fibonacci[orNil: -20 ..< -10])
         XCTAssertNil(first5Fibonacci[orNil:   7 ..<  9])
     }
@@ -51,8 +55,12 @@ final class RangeOrNilTests: XCTestCase {
         XCTAssertEqual(first5Fibonacci[orNil: 0...1], [1, 1])
         XCTAssertEqual(first5Fibonacci[orNil: 0...0], [1])
         
+        XCTAssertEqual(first5Fibonacci[orNil: 2...2], [2])
+        
         XCTAssertNil(first5Fibonacci[orNil:  -1 ...  0])
+        XCTAssertNil(first5Fibonacci[orNil:  -1 ...  2])
         XCTAssertNil(first5Fibonacci[orNil:   0 ...  6])
+        XCTAssertNil(first5Fibonacci[orNil:   2 ...  6])
         XCTAssertNil(first5Fibonacci[orNil: -20 ... -10])
         XCTAssertNil(first5Fibonacci[orNil:   7 ...  9])
     }
