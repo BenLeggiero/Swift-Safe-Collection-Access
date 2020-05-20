@@ -1,5 +1,5 @@
 //
-//  Safe Collection Access.swift
+//  SafeCollectionAccessTests.swift
 //  Safe Collection Access
 //
 //  Created by Ben Leggiero on 2019-12-06.
@@ -41,7 +41,8 @@ final class SafeCollectionAccessTests: XCTestCase {
     }
     
     
-    func testSubscriptSafe() {
+    @available(swift, deprecated: 0.0.1, message: "Deprecated in 1.2.0")
+    func testSubscriptSafe() { // TODO: Remove in 2.0.0
         XCTAssertEqual(1, first5Fibonacci[safe: 0])
         XCTAssertEqual(1, first5Fibonacci[safe: 1])
         XCTAssertEqual(2, first5Fibonacci[safe: 2])
@@ -111,7 +112,6 @@ final class SafeCollectionAccessTests: XCTestCase {
     
     static var allTests = [
         ("testSubscriptOrNil", testSubscriptOrNil),
-        ("testSubscriptSafe", testSubscriptSafe),
         ("testSubscriptClamping", testSubscriptClamping),
     ]
 }
