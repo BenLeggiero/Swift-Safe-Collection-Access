@@ -12,6 +12,31 @@
 
 public extension RandomAccessCollection {
     
+    /// Determines whether this collection has an item at the given index
+    ///
+    /// - Parameter index: An index that might be in this collection
+    /// - Returns: `true` iff `index` points to an item that's in this collection
+    func contains(index: Index) -> Bool {
+        indices.contains(index)
+    }
+    
+    
+    /// Determines whether this collection contains all the indices in the given index
+    ///
+    /// This is a naïve iteration over all the indices in this collection
+    ///
+    /// - Complexity: O(n)
+    ///
+    /// - Parameter otherIndices: Some indices which might point to items in this collection
+    /// - Returns: `false` if any of the given indices
+    func contains<Indices>(allIn otherIndices: Indices) -> Bool
+        where Indices: Sequence,
+            Indices.Element == Index
+    {
+        otherIndices.allSatisfy { indices.contains($0) }
+    }
+    
+    
     /// Safely access this collection. If the index you pass is not in this collection, then `nil` is returned.
     ///
     /// If you don't like the `orNil` syntax, you may also use `[safe:]`.
@@ -20,19 +45,25 @@ public extension RandomAccessCollection {
     /// - Returns: The element which is in this collection at the given index, or `nil` if it's outside this collection
     @inlinable
     subscript(orNil index: Index) -> Element? {
-        return indices.contains(index) ? self[index] : nil
+        return contains(index: index)
+            ? self[index]
+            : nil
     }
     
     
+    /// - Deprecated: Use a subscript with a more descriptive label, like `[orNil:]` or `[clamping:]`
+    ///
     /// Safely access this collection. If the index you pass is not in this collection, then `nil` is returned.
     ///
     /// This is an inlined alias to `[orNil:]`.
     ///
+    ///
     /// - Parameter index: The index of the element to retrieve, or an index outside this collection
     /// - Returns: The element which is in this collection at the given index, or `nil` if it's outside this collection
     @inline(__always)
+    @available(swift, deprecated: 0.0.1, message: "Deprecated in SafeCollectionAccess 1.2.0: Since there is no clear behavior of a 'safe' subscript, use the one which best describes your target behavior, like `[orNil:]` or `[clamping:]`")
     subscript(safe index: Index) -> Element? {
-        return self[orNil: index]
+        self[orNil: index]
     }
 }
 
