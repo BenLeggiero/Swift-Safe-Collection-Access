@@ -41,32 +41,6 @@ final class SafeCollectionAccessTests: XCTestCase {
     }
     
     
-    @available(swift, deprecated: 0.0.1, message: "Deprecated in 1.2.0")
-    func testSubscriptSafe() { // TODO: Remove in 2.0.0
-        XCTAssertEqual(1, first5Fibonacci[safe: 0])
-        XCTAssertEqual(1, first5Fibonacci[safe: 1])
-        XCTAssertEqual(2, first5Fibonacci[safe: 2])
-        XCTAssertEqual(3, first5Fibonacci[safe: 3])
-        XCTAssertEqual(5, first5Fibonacci[safe: 4])
-        
-        XCTAssertNotEqual(first5Fibonacci[safe: -1], first5Fibonacci[safe: 0])
-        XCTAssertEqual(first5Fibonacci[safe: 0], first5Fibonacci[safe: 1])
-        XCTAssertNotEqual(first5Fibonacci[safe: 1], first5Fibonacci[safe: 2])
-        XCTAssertNotEqual(first5Fibonacci[safe: 2], first5Fibonacci[safe: 3])
-        XCTAssertNotEqual(first5Fibonacci[safe: 3], first5Fibonacci[safe: 4])
-        
-        XCTAssertNil(first5Fibonacci[safe: -2])
-        XCTAssertNil(first5Fibonacci[safe: -1])
-        XCTAssertNotNil(first5Fibonacci[safe: 0])
-        XCTAssertNotNil(first5Fibonacci[safe: 1])
-        XCTAssertNotNil(first5Fibonacci[safe: 2])
-        XCTAssertNotNil(first5Fibonacci[safe: 3])
-        XCTAssertNotNil(first5Fibonacci[safe: 4])
-        XCTAssertNil(first5Fibonacci[safe: 5])
-        XCTAssertNil(first5Fibonacci[safe: 6])
-    }
-    
-    
     func testSubscriptClamping() {
         XCTAssertEqual(1, first5Fibonacci[clamping: 0])
         XCTAssertEqual(1, first5Fibonacci[clamping: 1])
