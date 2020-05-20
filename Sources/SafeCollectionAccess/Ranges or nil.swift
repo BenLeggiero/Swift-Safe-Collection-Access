@@ -15,7 +15,7 @@ public extension RandomAccessCollection {
     /// Safely access ranges in this collection.
     /// If the range you pass extends outside this collection, `nil` is returned.
     ///
-    /// - Complexity: O(n)
+    /// - Complexity: O(1)
     ///
     /// - Parameter range: A range of valid lower and upper indices of characters in the string.
     /// - Returns: The characters at the given index-range in this string, or `nil` if the given range is not contained
@@ -31,7 +31,7 @@ public extension RandomAccessCollection {
     /// Safely access ranges in this collection.
     /// If the range you pass extends outside this collection, `nil` is returned.
     ///
-    /// - Complexity: O(n)
+    /// - Complexity: O(1)
     ///
     /// - Parameter range: A range of valid lower and upper indices of characters in the string.
     /// - Returns: The characters at the given index-range in this string, or `nil` if the given range is not contained
