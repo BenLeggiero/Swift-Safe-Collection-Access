@@ -58,6 +58,12 @@ public extension RandomAccessCollection {
     ///            within `0` (inclusive) and `count` (exclusive).
     @inlinable
     subscript(orNil range: PartialRangeFrom<Index>) -> SubSequence? {
+        
+        guard range.lowerBound != endIndex else {
+            // `self[...self.endIndex]` is always valid, resulting in an empty subsequence
+            return self[range]
+        }
+        
         return contains(index: range.lowerBound)
             ? self[orNil: Range(uncheckedBounds: (lower: range.lowerBound, upper: endIndex))]
             : nil
@@ -74,6 +80,12 @@ public extension RandomAccessCollection {
     ///            within `0` (inclusive) and `count` (inclusive).
     @inlinable
     subscript(orNil range: PartialRangeUpTo<Index>) -> SubSequence? {
+        
+        guard range.upperBound != startIndex else {
+            // `self[..<self.startIndex]` is always valid, resulting in an empty subsequence
+            return self[range]
+        }
+        
         return contains(index: index(before: range.upperBound))
             ? self[orNil: startIndex ..< range.upperBound]
             : nil
