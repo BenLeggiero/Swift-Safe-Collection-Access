@@ -33,6 +33,24 @@ final class RangeOrNilTests: XCTestCase {
         
         XCTAssertEqual(first5Fibonacci[orNil: 2..<2], [])
         
+        
+        XCTAssertEqual(first5Fibonacci[orNil: 0..<5], first5Fibonacci[0..<5])
+        XCTAssertEqual(first5Fibonacci[orNil: 1..<5], first5Fibonacci[1..<5])
+        XCTAssertEqual(first5Fibonacci[orNil: 2..<5], first5Fibonacci[2..<5])
+        XCTAssertEqual(first5Fibonacci[orNil: 3..<5], first5Fibonacci[3..<5])
+        XCTAssertEqual(first5Fibonacci[orNil: 4..<5], first5Fibonacci[4..<5])
+        XCTAssertEqual(first5Fibonacci[orNil: 5..<5], first5Fibonacci[5..<5])
+        
+        XCTAssertEqual(first5Fibonacci[orNil: 0..<5], first5Fibonacci[0..<5])
+        XCTAssertEqual(first5Fibonacci[orNil: 0..<4], first5Fibonacci[0..<4])
+        XCTAssertEqual(first5Fibonacci[orNil: 0..<3], first5Fibonacci[0..<3])
+        XCTAssertEqual(first5Fibonacci[orNil: 0..<2], first5Fibonacci[0..<2])
+        XCTAssertEqual(first5Fibonacci[orNil: 0..<1], first5Fibonacci[0..<1])
+        XCTAssertEqual(first5Fibonacci[orNil: 0..<0], first5Fibonacci[0..<0])
+        
+        XCTAssertEqual(first5Fibonacci[orNil: 2..<2], first5Fibonacci[2..<2])
+        
+        
         XCTAssertNil(first5Fibonacci[orNil:  -1 ..<  0])
         XCTAssertNil(first5Fibonacci[orNil:  -1 ..<  2])
         XCTAssertNil(first5Fibonacci[orNil:   0 ..<  6])
@@ -57,6 +75,22 @@ final class RangeOrNilTests: XCTestCase {
         
         XCTAssertEqual(first5Fibonacci[orNil: 2...2], [2])
         
+        
+        XCTAssertEqual(first5Fibonacci[orNil: 0...4], first5Fibonacci[0...4])
+        XCTAssertEqual(first5Fibonacci[orNil: 1...4], first5Fibonacci[1...4])
+        XCTAssertEqual(first5Fibonacci[orNil: 2...4], first5Fibonacci[2...4])
+        XCTAssertEqual(first5Fibonacci[orNil: 3...4], first5Fibonacci[3...4])
+        XCTAssertEqual(first5Fibonacci[orNil: 4...4], first5Fibonacci[4...4])
+        
+        XCTAssertEqual(first5Fibonacci[orNil: 0...4], first5Fibonacci[0...4])
+        XCTAssertEqual(first5Fibonacci[orNil: 0...3], first5Fibonacci[0...3])
+        XCTAssertEqual(first5Fibonacci[orNil: 0...2], first5Fibonacci[0...2])
+        XCTAssertEqual(first5Fibonacci[orNil: 0...1], first5Fibonacci[0...1])
+        XCTAssertEqual(first5Fibonacci[orNil: 0...0], first5Fibonacci[0...0])
+        
+        XCTAssertEqual(first5Fibonacci[orNil: 2...2], first5Fibonacci[2...2])
+        
+        
         XCTAssertNil(first5Fibonacci[orNil:  -1 ...  0])
         XCTAssertNil(first5Fibonacci[orNil:  -1 ...  2])
         XCTAssertNil(first5Fibonacci[orNil:   0 ...  6])
@@ -72,8 +106,16 @@ final class RangeOrNilTests: XCTestCase {
         XCTAssertEqual(first5Fibonacci[orNil: 2...], [2, 3, 5])
         XCTAssertEqual(first5Fibonacci[orNil: 3...], [3, 5])
         XCTAssertEqual(first5Fibonacci[orNil: 4...], [5])
+        XCTAssertEqual(first5Fibonacci[orNil: 5...], [])
         
-        XCTAssertNil(first5Fibonacci[orNil: (  5)...])
+        XCTAssertEqual(first5Fibonacci[orNil: 0...], first5Fibonacci[0...])
+        XCTAssertEqual(first5Fibonacci[orNil: 1...], first5Fibonacci[1...])
+        XCTAssertEqual(first5Fibonacci[orNil: 2...], first5Fibonacci[2...])
+        XCTAssertEqual(first5Fibonacci[orNil: 3...], first5Fibonacci[3...])
+        XCTAssertEqual(first5Fibonacci[orNil: 4...], first5Fibonacci[4...])
+        XCTAssertEqual(first5Fibonacci[orNil: 5...], first5Fibonacci[5...])
+        
+        XCTAssertNil(first5Fibonacci[orNil: (  6)...])
         XCTAssertNil(first5Fibonacci[orNil: ( -1)...])
         XCTAssertNil(first5Fibonacci[orNil: (-20)...])
         XCTAssertNil(first5Fibonacci[orNil: (  7)...])
@@ -86,8 +128,16 @@ final class RangeOrNilTests: XCTestCase {
         XCTAssertEqual(first5Fibonacci[orNil: ..<3], [1, 1, 2])
         XCTAssertEqual(first5Fibonacci[orNil: ..<2], [1, 1])
         XCTAssertEqual(first5Fibonacci[orNil: ..<1], [1])
+        XCTAssertEqual(first5Fibonacci[orNil: ..<0], [])
         
-        XCTAssertNil(first5Fibonacci[orNil: ..<( 0 )])
+        XCTAssertEqual(first5Fibonacci[orNil: ..<5], first5Fibonacci[..<5])
+        XCTAssertEqual(first5Fibonacci[orNil: ..<4], first5Fibonacci[..<4])
+        XCTAssertEqual(first5Fibonacci[orNil: ..<3], first5Fibonacci[..<3])
+        XCTAssertEqual(first5Fibonacci[orNil: ..<2], first5Fibonacci[..<2])
+        XCTAssertEqual(first5Fibonacci[orNil: ..<1], first5Fibonacci[..<1])
+        XCTAssertEqual(first5Fibonacci[orNil: ..<0], first5Fibonacci[..<0])
+        
+        XCTAssertNil(first5Fibonacci[orNil: ..<(-1 )])
         XCTAssertNil(first5Fibonacci[orNil: ..<( 6 )])
         XCTAssertNil(first5Fibonacci[orNil: ..<(-10)])
         XCTAssertNil(first5Fibonacci[orNil: ..<( 9 )])
@@ -100,6 +150,12 @@ final class RangeOrNilTests: XCTestCase {
         XCTAssertEqual(first5Fibonacci[orNil: ...2], [1, 1, 2])
         XCTAssertEqual(first5Fibonacci[orNil: ...1], [1, 1])
         XCTAssertEqual(first5Fibonacci[orNil: ...0], [1])
+        
+        XCTAssertEqual(first5Fibonacci[orNil: ...4], first5Fibonacci[...4])
+        XCTAssertEqual(first5Fibonacci[orNil: ...3], first5Fibonacci[...3])
+        XCTAssertEqual(first5Fibonacci[orNil: ...2], first5Fibonacci[...2])
+        XCTAssertEqual(first5Fibonacci[orNil: ...1], first5Fibonacci[...1])
+        XCTAssertEqual(first5Fibonacci[orNil: ...0], first5Fibonacci[...0])
         
         XCTAssertNil(first5Fibonacci[orNil: ...( 6 )])
         XCTAssertNil(first5Fibonacci[orNil: ...(-10)])
