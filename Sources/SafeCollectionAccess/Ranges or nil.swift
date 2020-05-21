@@ -60,7 +60,7 @@ public extension RandomAccessCollection {
     subscript(orNil range: PartialRangeFrom<Index>) -> SubSequence? {
         
         guard range.lowerBound != endIndex else {
-            // `self[...self.endIndex]` is always valid, resulting in an empty subsequence
+            // `self[self.endIndex...]` is always valid, resulting in an empty subsequence
             return self[range]
         }
         
