@@ -65,7 +65,7 @@ public extension RandomAccessCollection {
         }
         
         return contains(index: range.lowerBound)
-            ? self[orNil: Range(uncheckedBounds: (lower: range.lowerBound, upper: endIndex))]
+            ? self[range.lowerBound...]
             : nil
     }
     
