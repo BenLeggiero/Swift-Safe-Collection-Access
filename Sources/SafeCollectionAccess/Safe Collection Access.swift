@@ -8,7 +8,7 @@
 
 
 
-// MARK: - `[orNil: ]` and `[safe: ]`
+// MARK: - `contains`
 
 public extension RandomAccessCollection {
     
@@ -35,11 +35,15 @@ public extension RandomAccessCollection {
     {
         otherIndices.allSatisfy { indices.contains($0) }
     }
+}
+
+
+
+// MARK: - `[orNil: ]`
+
+public extension RandomAccessCollection {
     
-    
-    /// Safely access this collection. If the index you pass is not in this collection, then `nil` is returned.
-    ///
-    /// If you don't like the `orNil` syntax, you may also use `[safe:]`.
+    /// Safely access an element in this collection. If the index you pass is not in this collection, then `nil` is returned.
     ///
     /// - Parameter index: The index of the element to retrieve, or an index outside this collection
     /// - Returns: The element which is in this collection at the given index, or `nil` if it's outside this collection
@@ -49,6 +53,35 @@ public extension RandomAccessCollection {
             ? self[index]
             : nil
     }
+    
+    
+    /// Safely access or mutate an element in this collection. If the index you pass is not in this collection, then `nil` is returned, or if you're trying to mutate this collection, nothing is done.
+    /// Setting the value to `nil` is interpreted as removing the element from this collection.
+    ///
+    /// - Parameter index: The index of the element to retrieve or modify, or an index outside this collection
+    /// - Returns: The element which is in this collection at the given index, or `nil` if it's outside this collection
+    @inlinable
+    subscript(orNil index: Index) -> Element?
+        where Self: MutableCollection,
+            Self: RangeReplaceableCollection
+    {
+        get {
+            contains(index: index)
+                ? self[index]
+                : nil
+        }
+        
+        set {
+            guard contains(index: index) else { return }
+            
+            if let newValue = newValue {
+                self[index] = newValue
+            }
+            else {
+                self.remove(at: index)
+            }
+        }
+    }
 }
 
 
@@ -57,8 +90,7 @@ public extension RandomAccessCollection {
 
 public extension RandomAccessCollection {
     
-    /// Safely access this collection. If the index you pass is not in this collection, the closest extreme is
-    /// returned. If this collection is empty (and thus there is no such extreme to return), then `nil` is returned.
+    /// Safely access an element in this collection. If the index you pass is not in this collection, the closest extreme is returned. If this collection is empty (and thus there is no such extreme to return), then `nil` is returned.
     ///
     /// - Parameter index: The index of the element to retrieve, or an index outside this collection
     /// - Returns: The element which is in this collection at the given index, or the closest one if it's outside this
@@ -76,6 +108,62 @@ public extension RandomAccessCollection {
         }
         else {
             return self[index]
+        }
+    }
+    
+    /// Safely access or mutate  an element in this collection. If the index you pass is not in this collection, the closest extreme is returned. If this collection is empty (and thus there is no such extreme to return), then `nil` is returned. When mutating this collection, the provided index is set, or the closest extreme index, unless the collection is empty, in which case no action is taken. Setting a slot to `nil` signifies removing that element
+    ///
+    /// - Parameter index: The index of the element to retrieve, or an index outside this collection
+    /// - Returns: The element which is in this collection at the given index, or the closest one if it's outside this
+    ///            collection, or `nil` if this collection is empty
+    @inlinable
+    subscript(clamping index: Index) -> Element?
+    where Self: RangeReplaceableCollection,
+          Self: MutableCollection
+    {
+        get {
+            if isEmpty {
+                return nil
+            }
+            else if index < startIndex {
+                return first
+            }
+            else if index >= endIndex {
+                return last
+            }
+            else {
+                return self[index]
+            }
+        }
+        
+        set {
+            if isEmpty {
+                return
+            }
+            else if index < startIndex {
+                if let newValue = newValue {
+                    self[startIndex] = newValue
+                }
+                else {
+                    self.remove(at: startIndex)
+                }
+            }
+            else if index >= endIndex {
+                if let newValue = newValue {
+                    self[self.index(endIndex, offsetBy: -1)] = newValue
+                }
+                else {
+                    self.remove(at: self.index(endIndex, offsetBy: -1))
+                }
+            }
+            else {
+                if let newValue = newValue {
+                    self[index] = newValue
+                }
+                else {
+                    self.remove(at: index)
+                }
+            }
         }
     }
 }
