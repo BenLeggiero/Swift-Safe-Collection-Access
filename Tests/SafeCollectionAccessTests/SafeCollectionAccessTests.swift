@@ -42,6 +42,13 @@ final class SafeCollectionAccessTests: XCTestCase {
         XCTAssertNil(first5Fibonacci[orNil: 6])
         
         
+        XCTAssertEqual(helloWorld[orNil: helloWorld.startIndex], "H")
+        XCTAssertEqual(helloWorld[orNil: helloWorld.index(helloWorld.startIndex, offsetBy: 0)], "H")
+        XCTAssertEqual(helloWorld[orNil: helloWorld.index(helloWorld.startIndex, offsetBy: 1)], "e")
+        XCTAssertEqual(helloWorld[orNil: helloWorld.index(helloWorld.startIndex, offsetBy: 12)], "!")
+        XCTAssertEqual(helloWorld[orNil: helloWorld.index(helloWorld.startIndex, offsetBy: 11)], "d")
+        
+        
         // MARK: Mutation
         
         mutationTest { copy in
