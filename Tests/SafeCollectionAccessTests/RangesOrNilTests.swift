@@ -11,10 +11,6 @@ import XCTest
 
 
 
-internal let first5Fibonacci = [1, 1, 2, 3, 5]
-
-
-
 final class RangeOrNilTests: XCTestCase {
     
     
@@ -59,6 +55,14 @@ final class RangeOrNilTests: XCTestCase {
         XCTAssertNil(first5Fibonacci[orNil:   2 ..<  6])
         XCTAssertNil(first5Fibonacci[orNil: -20 ..< -10])
         XCTAssertNil(first5Fibonacci[orNil:   7 ..<  9])
+        
+        
+        XCTAssertEqual(helloWorld[orNil:                  helloWorld.startIndex                ..<                  helloWorld.endIndex                 ], "Hello, World!")
+        XCTAssertEqual(helloWorld[orNil:                  helloWorld.startIndex                ..< helloWorld.index(helloWorld.startIndex, offsetBy: 1) ], "H")
+        XCTAssertEqual(helloWorld[orNil: helloWorld.index(helloWorld.startIndex, offsetBy: 1)  ..< helloWorld.index(helloWorld.startIndex, offsetBy: 5) ], "ello")
+        XCTAssertEqual(helloWorld[orNil: helloWorld.index(helloWorld.startIndex, offsetBy: 5)  ..< helloWorld.index(helloWorld.startIndex, offsetBy: 5) ], "")
+        XCTAssertEqual(helloWorld[orNil: helloWorld.index(helloWorld.startIndex, offsetBy: 12) ..< helloWorld.index(helloWorld.startIndex, offsetBy: 12)], "")
+        XCTAssertEqual(helloWorld[orNil: helloWorld.index(helloWorld.startIndex, offsetBy: 11) ..<                  helloWorld.endIndex                 ], "d!")
         
         
         mutationTest { copy1, copy2 in
@@ -140,6 +144,16 @@ final class RangeOrNilTests: XCTestCase {
         XCTAssertNil(first5Fibonacci[orNil:   2 ...  6])
         XCTAssertNil(first5Fibonacci[orNil: -20 ... -10])
         XCTAssertNil(first5Fibonacci[orNil:   7 ...  9])
+        
+        
+        XCTAssertEqual(helloWorld[orNil:                  helloWorld.startIndex                ... helloWorld.index(helloWorld.startIndex, offsetBy: 12)], "Hello, World!")
+        XCTAssertEqual(helloWorld[orNil:                  helloWorld.startIndex                ... helloWorld.index(helloWorld.startIndex, offsetBy: 1)], "He")
+        XCTAssertEqual(helloWorld[orNil: helloWorld.index(helloWorld.startIndex, offsetBy: 1)  ... helloWorld.index(helloWorld.startIndex, offsetBy: 5)], "ello,")
+        XCTAssertEqual(helloWorld[orNil: helloWorld.index(helloWorld.startIndex, offsetBy: 12) ... helloWorld.index(helloWorld.startIndex, offsetBy: 12)], "!")
+        XCTAssertEqual(helloWorld[orNil: helloWorld.index(helloWorld.startIndex, offsetBy: 11) ... helloWorld.index(helloWorld.startIndex, offsetBy: 12)], "d!")
+        
+        
+        XCTAssertNil(  helloWorld[orNil:                  helloWorld.startIndex                ... helloWorld.index(helloWorld.startIndex, offsetBy: 13)])
         
         
         mutationTest { copy1, copy2 in
@@ -293,6 +307,13 @@ final class RangeOrNilTests: XCTestCase {
         XCTAssertNil(first5Fibonacci[orNil: ..<(-10)])
         XCTAssertNil(first5Fibonacci[orNil: ..<( 9 )])
         
+        XCTAssertEqual(helloWorld[orNil: ..<helloWorld.startIndex                                ], "")
+        XCTAssertEqual(helloWorld[orNil: ..<helloWorld.index(helloWorld.startIndex, offsetBy: 1) ], "H")
+        XCTAssertEqual(helloWorld[orNil: ..<helloWorld.index(helloWorld.startIndex, offsetBy: 5) ], "Hello")
+        XCTAssertEqual(helloWorld[orNil: ..<helloWorld.index(helloWorld.startIndex, offsetBy: 12)], "Hello, World")
+        XCTAssertEqual(helloWorld[orNil: ..<helloWorld.index(helloWorld.startIndex, offsetBy: 12)], "Hello, World")
+        XCTAssertEqual(helloWorld[orNil: ..<helloWorld.index(helloWorld.startIndex, offsetBy: 13)], "Hello, World!")
+        
         
         
         mutationTest { copy1, copy2 in
@@ -376,6 +397,12 @@ final class RangeOrNilTests: XCTestCase {
         XCTAssertNil(first5Fibonacci[orNil: ...( 6 )])
         XCTAssertNil(first5Fibonacci[orNil: ...(-10)])
         XCTAssertNil(first5Fibonacci[orNil: ...( 9 )])
+        
+        XCTAssertEqual(helloWorld[orNil: ...helloWorld.startIndex                                ], "H")
+        XCTAssertEqual(helloWorld[orNil: ...helloWorld.index(helloWorld.startIndex, offsetBy: 1) ], "He")
+        XCTAssertEqual(helloWorld[orNil: ...helloWorld.index(helloWorld.startIndex, offsetBy: 5) ], "Hello,")
+        XCTAssertEqual(helloWorld[orNil: ...helloWorld.index(helloWorld.startIndex, offsetBy: 11)], "Hello, World")
+        XCTAssertEqual(helloWorld[orNil: ...helloWorld.index(helloWorld.startIndex, offsetBy: 12)], "Hello, World!")
 
 
 
@@ -445,28 +472,4 @@ final class RangeOrNilTests: XCTestCase {
         ("testSubscriptOrNil_PartialRangeUpTo", testSubscriptOrNil_PartialRangeUpTo),
         ("testSubscriptOrNil_PartialRangeUpThrough", testSubscriptOrNil_PartialRangeUpThrough),
     ]
-}
-
-
-
-internal func mutationTest<Value>(with value: Value, do closure: (_ copy: inout Value) -> Void) {
-    var copy = value
-    closure(&copy)
-}
-
-
-internal func mutationTest(do test: (_ copy: inout [Int]) -> Void) {
-    mutationTest(with: first5Fibonacci, do: test)
-}
-
-
-internal func mutationTest<Value>(with value: Value, do closure: (_ copy1: inout Value, _ copy2: inout Value) -> Void) {
-    var copy1 = value
-    var copy2 = value
-    closure(&copy1, &copy2)
-}
-
-
-internal func mutationTest(do test: (_ copy1: inout [Int], _ copy2: inout [Int]) -> Void) {
-    mutationTest(with: first5Fibonacci, do: test)
 }

@@ -10,6 +10,7 @@ import RangeTools
 
 
 
+/// A `RangeExpression` which can safely represent a slice of a collection
 public protocol SafeRangeExpression: RangeExpression {
     
     /// Returns the range of indices described by this range expression within the given collection, guaranteeing it does not overextend the collection's boundaries.
@@ -68,7 +69,7 @@ extension RangeWithLowerBound where Self: SafeRangeExpression {
     where RelativeCollection: Collection,
           Bound == RelativeCollection.Index
     {
-        bound(lowerBound, isWithin: collection, lookBeyondStartIndex: false, lookBeyondEndIndex: true)
+        bound(lowerBound, isWithin: collection, lenientStartIndex: false, lookBeyondEndIndex: true)
     }
     
     
@@ -111,7 +112,7 @@ extension RangeWithUpperBound where Self: SafeRangeExpression {
     where RelativeCollection: Collection,
           Bound == RelativeCollection.Index
     {
-        bound(upperBound, isWithin: collection, lookBeyondStartIndex: Self.upperBoundIsInclusive, lookBeyondEndIndex: false) // Ranges with an upper but no lower bound can place their upper bound just before the start index for an empty slice
+        bound(upperBound, isWithin: collection, lenientStartIndex: Self.upperBoundIsInclusive, lookBeyondEndIndex: false) // Ranges with an upper but no lower bound can place their upper bound just before the start index for an empty slice
     }
     
     
@@ -179,21 +180,42 @@ private extension SafeRangeExpression where Self: RangeProtocol {
     /// Determines whether the given bound is within the collection
     ///
     /// - Parameters:
-    ///   - bound:      The bound to check
-    ///   - collection: The collection to check against
-    ///   - lookBeyondStartIndex: If `true`, then `bound` can be up to `1` beyond the collection's start index
-    ///   - lookBeyondEndIndex:  if `true`, then `bound` can be up to `1` beyond the collection's end index
+    ///   - bound:              The bound to check
+    ///   - collection:         The collection to check against
+    ///   - lenientStartIndex:  If `true`, then `bound` can be up to `1` beyond the collection's start index
+    ///   - lookBeyondEndIndex: if `true`, then `bound` can be up to `1` beyond the collection's end index
     ///
     /// - Returns: `true` iff the given bound is in the given collection
     @inline(__always)
-    func bound<RelativeCollection>(_ bound: Bound, isWithin collection: RelativeCollection, lookBeyondStartIndex: Bool, lookBeyondEndIndex: Bool) -> Bool
+    func bound<RelativeCollection>(
+        _ bound: Bound,
+        isWithin collection: RelativeCollection,
+        lenientStartIndex: Bool,
+        lookBeyondEndIndex: Bool)
+    -> Bool
     where RelativeCollection: Collection,
           Bound == RelativeCollection.Index
     {
-        let startIndex = lookBeyondStartIndex ? collection.index(collection.startIndex, offsetBy: -1) : collection.startIndex
-        
-        guard bound >= startIndex else {
-            return false
+        if lenientStartIndex {
+            let startBound: Bound
+            
+            if bound < collection.endIndex,
+                collection.index(after: bound) == collection.startIndex
+            {
+                startBound = collection.startIndex
+            }
+            else {
+                startBound = bound
+            }
+            
+            guard startBound >= collection.startIndex else {
+                return false
+            }
+        }
+        else {
+            guard bound >= collection.startIndex else {
+                return false
+            }
         }
         
         if !Self.upperBoundIsInclusive
